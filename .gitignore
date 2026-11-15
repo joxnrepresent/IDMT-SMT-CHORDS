@@ -2,3 +2,4 @@
 *.WAV
 .venv/
 .DS_Store
+src/data/audio
