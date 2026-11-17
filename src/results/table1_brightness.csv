@@ -1,0 +1,17 @@
+instrument,family,median,q25,q75
+garageband_piano_Jazz_Organ,non_guitar,462,325,713
+ableton_live_guitar_Nylon_Concerto_Guitar,guitar,547,434,698
+garageband_piano_Deluxe_Modern,non_guitar,588,511,689
+ableton_live_guitar_Guitar_Open,guitar,611,538,701
+garageband_guitar_Acoustic_Guitar,guitar,718,610,886
+ableton_live_piano_Sadness_Pad,non_guitar,722,500,993
+ableton_live_piano_Grand_Piano_Reverb,non_guitar,728,664,784
+ableton_live_piano_Grand_Piano,non_guitar,734,667,798
+garageband_piano_Boesendorfer Grand Piano,non_guitar,757,726,836
+ableton_live_piano_Piano_to_Pad_electric_piano,non_guitar,780,738,845
+garageband_piano_Steinway_Grand_Piano,non_guitar,959,862,1064
+ableton_live_guitar_Campfire,guitar,1162,854,1442
+ableton_live_piano_Sweetness_Pad,non_guitar,1367,987,1854
+ableton_live_piano_Celestial_Pad,non_guitar,1434,1030,1982
+garageband_guitar_Classic_Clean,guitar,1503,1285,1704
+garageband_guitar_Hard_Rock,guitar,2092,1875,2287
