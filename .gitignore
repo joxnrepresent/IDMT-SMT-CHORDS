@@ -4,3 +4,5 @@
 .DS_Store
 src/data/audio
 *.npy
+src/__pycache__/
+src/E1.ipynb
