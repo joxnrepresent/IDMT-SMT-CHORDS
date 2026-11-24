@@ -1,5 +1,5 @@
 {
-  "source": "midi",
+  "source": "audio",
   "mode": "live",
   "audio_in": null,
   "channel": 0,
@@ -9,15 +9,14 @@
   "models": [
     "Mathematical",
     "SVM",
-    "MLP",
-    "ij"
+    "MLP"
   ],
   "knobs": {
-    "wave": 0.625,
-    "cutoff": 0.36250000000000004,
-    "res": 0.2,
-    "attack": 0.1,
-    "decay": 0.5,
+    "wave": 0.375,
+    "cutoff": 0.4638802083333334,
+    "res": 0.34442708333333333,
+    "attack": 0.17377604166666666,
+    "decay": 0.5090104166666667,
     "sustain": 0.307109375,
     "release": 0.35,
     "volume": 1.0
