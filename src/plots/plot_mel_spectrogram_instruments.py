@@ -2,7 +2,6 @@
 from pathlib import Path
 
 import librosa
-import librosa.display
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -85,19 +84,31 @@ def main():
     axes = np.asarray(axes).reshape(-1)
     image = None
     for ax, (audio_path, start, end, sample_rate, fmax, mel_db) in zip(axes, spectra):
-        image = librosa.display.specshow(
-            mel_db,
+        frame_times = librosa.frames_to_time(
+            np.arange(mel_db.shape[1]),
             sr=sample_rate,
             hop_length=HOP_LENGTH,
-            x_axis="time",
-            y_axis="mel",
+        )
+        mel_center_frequencies = librosa.mel_frequencies(
+            n_mels=N_MELS,
             fmin=FMIN,
             fmax=fmax,
+        )
+        image = ax.pcolormesh(
+            frame_times,
+            mel_center_frequencies,
+            mel_db,
+            shading="auto",
             cmap="magma",
             vmin=-70,
             vmax=0,
-            ax=ax,
         )
+        ax.set_yscale("log")
+        ax.set_ylim(FMIN, fmax)
+        ax.set_ylabel("Frequency (Hz, log scale)")
+        ax.set_xlabel("Time (seconds)")
+        ax.set_yticks([32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000])
+        ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
         ax.set_title(
             f"{audio_path.stem.replace('_', ' ')}\nE:maj ({start:g}-{end:g} s)",
             fontsize=8,
@@ -108,7 +119,8 @@ def main():
 
     fig.suptitle(
         "Mel-Spectrogram Comparison Across Instruments\n"
-        "First root-position E:maj chord; each panel normalized to its own peak",
+        "First root-position E:maj chord; logarithmic frequency; "
+        "each panel normalized to its own peak",
         fontsize=15,
     )
     colorbar = fig.colorbar(image, ax=axes[:len(spectra)].tolist(), shrink=0.82)
