@@ -45,6 +45,7 @@ from sklearn.model_selection import cross_val_score, train_test_split #cross_val
 import librosa
 from sklearn.svm import SVC #i probably wont need this but just in case i do
 from sklearn.calibration import CalibratedClassifierCV
+import joblib
 
 
 
@@ -78,6 +79,10 @@ X_train_sc = scaler.transform(X_train)
 X_val_sc = scaler.transform(X_val) #scales the validation set using the training mean and std
 X_test_sc = scaler.transform(X_test)
 
+MODEL_DIR = SRC_DIR / "models" #points to src/models/ where saved models will go
+MODEL_DIR.mkdir(exist_ok=True) #creates the src/models/ folder if it doesnt exist yet
+joblib.dump(scaler, MODEL_DIR / "scaler.joblib") #saves the fitted scaler so presentation_models.py can scale live clips the exact same way
+
 
 #2. Tune k-NN on the validation set before testing
 Kvals = [1, 3, 5, 9, 15] #candidate values for k (number of neighbours)
@@ -104,6 +109,12 @@ models = {
 #now the basic models are complete, i will now attempt to implement SVM and random forest classifiers, and compare their performace with the previous modeles
 
 
+filenames = {
+    "Logistic Regression": "logreg.joblib",
+    "k-NN": "knn.joblib",
+    "SVM": "svm.joblib",
+    "Random Forest": "rf.joblib"
+} #maps each model name to its filename in src/models/
 
 
 for name, model in models.items():
@@ -111,6 +122,7 @@ for name, model in models.items():
     y_pred = model.predict(X_test_sc) #predict the labels for the test data
     accuracy = accuracy_score(y_test, y_pred) #calculate the accuract of the model, this is done by comparing the predicted labels with the true labels for the test data
     print(f"{name}: {accuracy:.3f}")
+    joblib.dump(model, MODEL_DIR / filenames[name]) #saves the trained model to src/models/
 
 
 
@@ -161,11 +173,16 @@ print(f"combined: {accuracy_score(y_test, combined_pred):.3f}")
 
 
 
-# TO DO NEXT:
-# 1. Save the fitted scaler and all 4 trained models to src/models/ using joblib.dump.
-# 2. Register the 4 models in src/presentation_models.py using @Model (load scaler + model,
+# DONE:
+# - Loaded 16 kHz audio clips and simplified labels to 84 chord classes (root:quality).
+# - Extracted 24 chroma features (12 means + 12 stds) and split 70/15/15 (train/val/test).
+# - Fitted StandardScaler on train, tuned k-NN on val, and calibrated SVM.
+# - Evaluated all 4 single models and tested the 2-model (root + quality) Random Forest setup.
+# - Saved the fitted scaler and all 4 trained models to src/models/ using joblib.dump.
+#
+# TO DO:
+# 1. Register the models in src/presentation_models.py using @Model (load scaler + model,
 #    extract the exact same 24 chroma features, scale, and return label + confidence).
-# 3. Launch presentation.py and test all 4 model names in the live demo grid.
-# 4. Commit and push stage4.py and presentation_models.py to GitHub and open a PR.
-# 5. Document the dataset, validation tuning, and test scores in the project report.
-
+# 2. Launch presentation.py and test all models in the live demo grid.
+# 3. Commit and push stage4.py and presentation_models.py to GitHub and open a PR.
+# 4. Document the dataset, validation tuning, 1-model vs. 2-model results, and test scores in the project report.
